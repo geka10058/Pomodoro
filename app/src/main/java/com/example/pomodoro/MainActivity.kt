@@ -52,27 +52,27 @@ class MainActivity : AppCompatActivity(), StopwatchListener {
     }
 
     override fun start(id: Int) {
-        changeStopwatch(id, null, true, 0L)
+        changeStopwatch(id, null, true)
     }
 
     override fun stop(id: Int, currentMs: Long) {
-        changeStopwatch(id, currentMs, false, 0L)
+        changeStopwatch(id, currentMs, false)
     }
 
-    override fun reset(id: Int) {
-        changeStopwatch(id, null, false, 0L)
-    }
+    /*override fun reset(id: Int, initTime: Long) {
+        changeStopwatch(id, initTime, false)
+    }*/
 
     override fun delete(id: Int) {
         stopwatches.remove(stopwatches.find { it.id == id })
         stopwatchAdapter.submitList(stopwatches.toList())
     }
 
-    private fun changeStopwatch(id: Int, currentMs: Long?, isStarted: Boolean, initTine: Long) {
+    private fun changeStopwatch(id: Int, currentMs: Long?, isStarted: Boolean) {
         val newTimers = mutableListOf<Stopwatch>()
         stopwatches.forEach {
             if (it.id == id) {
-                newTimers.add(Stopwatch(it.id, currentMs ?: it.currentInMs, isStarted, 0L))
+                newTimers.add(Stopwatch(it.id, currentMs ?: it.currentInMs, isStarted, it.initTime))
             } else {
                 newTimers.add(it)
             }

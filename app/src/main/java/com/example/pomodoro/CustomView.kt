@@ -41,8 +41,7 @@ class CustomView @JvmOverloads constructor(
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-        if (periodMs == 0L || currentMs == 0L) return
-
+        //if (periodMs == 0L || currentMs == 0L) return
 
         canvas.drawArc(
             0f,

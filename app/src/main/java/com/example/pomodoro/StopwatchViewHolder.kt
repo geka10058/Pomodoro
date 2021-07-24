@@ -24,6 +24,7 @@ class StopwatchViewHolder(
     fun bind(stopwatch: Stopwatch) {
         //stopwatch.isStarted = true
         binding.stopwatchTimer.text = stopwatch.currentInMs.displayTime()
+        binding.customView.setCurrent(stopwatch.currentInMs, stopwatch.initTime)
 
         if (stopwatch.isStarted) {
             startTimer(stopwatch)
@@ -46,7 +47,7 @@ class StopwatchViewHolder(
             }
         }
 
-        binding.restartButton.setOnClickListener { listener.reset(stopwatch.id) }
+        //binding.restartButton.setOnClickListener { listener.reset(stopwatch.id, stopwatch.initTime) }
 
         binding.deleteButton.setOnClickListener { listener.delete(stopwatch.id) }
     }

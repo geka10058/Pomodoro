@@ -5,5 +5,5 @@ data class Stopwatch(
     val id: Int,
     var currentInMs: Long,
     var isStarted: Boolean,
-    var initTime: Long
+    val initTime: Long = currentInMs
 )
