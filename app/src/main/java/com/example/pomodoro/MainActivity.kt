@@ -15,8 +15,8 @@ class MainActivity : AppCompatActivity(), StopwatchListener {
     private val stopwatchAdapter = StopwatchAdapter(this)
     private val stopwatches = mutableListOf<Stopwatch>()
     private var nextId = 0
-    private var field : EditText? = null
-    private var minutes = 0L
+    private var field: EditText? = null
+    private var current = 0L
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,36 +30,37 @@ class MainActivity : AppCompatActivity(), StopwatchListener {
 
         //if (binding.textField.text.isEmpty()) minutes = binding.textField.text.toString().toLong()
 
-
         binding.recycler.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = stopwatchAdapter
         }
 
         binding.addNewStopwatchButton.setOnClickListener {
-            //
-            when{
-                binding.textField.text.isEmpty() -> Toast.makeText(this, "Поле пусто. Ввеите врмя в минутах", Toast.LENGTH_SHORT).show()
+            when {
+                binding.textField.text.isEmpty() -> Toast.makeText(
+                    this,
+                    "Поле пусто. Введите время в минутах",
+                    Toast.LENGTH_SHORT
+                ).show()
                 else -> {
-                    minutes = field?.text.toString().toLong()
-                    stopwatches.add(Stopwatch(nextId++, minutes, false))
+                    current = field?.text.toString().toLong()*60000
+                    stopwatches.add(Stopwatch(nextId++, current, false, current))
                     stopwatchAdapter.submitList(stopwatches.toList())
                 }
             }
-
         }
     }
 
     override fun start(id: Int) {
-        changeStopwatch(id, null, true)
+        changeStopwatch(id, null, true, 0L)
     }
 
     override fun stop(id: Int, currentMs: Long) {
-        changeStopwatch(id, currentMs, false)
+        changeStopwatch(id, currentMs, false, 0L)
     }
 
     override fun reset(id: Int) {
-        changeStopwatch(id, 0L, false)
+        changeStopwatch(id, null, false, 0L)
     }
 
     override fun delete(id: Int) {
@@ -67,14 +68,15 @@ class MainActivity : AppCompatActivity(), StopwatchListener {
         stopwatchAdapter.submitList(stopwatches.toList())
     }
 
-    private fun changeStopwatch(id: Int, currentMs: Long?, isStarted: Boolean) {
+    private fun changeStopwatch(id: Int, currentMs: Long?, isStarted: Boolean, initTine: Long) {
         val newTimers = mutableListOf<Stopwatch>()
         stopwatches.forEach {
             if (it.id == id) {
-                newTimers.add(Stopwatch(it.id, currentMs ?: it.currentMinutes, isStarted))
+                newTimers.add(Stopwatch(it.id, currentMs ?: it.currentInMs, isStarted, 0L))
             } else {
                 newTimers.add(it)
             }
+
         }
         stopwatchAdapter.submitList(newTimers)
         stopwatches.clear()

@@ -8,7 +8,7 @@ import android.util.AttributeSet
 import android.view.View
 
 
-class CustomView(
+class CustomView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defaultStyleAttr: Int = 0
@@ -19,6 +19,7 @@ class CustomView(
     private var color = 0
     private var style = FILL
     private val paint = Paint()
+    private var angle = 0f
 
     init {
         if (attrs != null) {
@@ -41,7 +42,7 @@ class CustomView(
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         if (periodMs == 0L || currentMs == 0L) return
-        val startAngel = (((currentMs % periodMs).toFloat() / periodMs) * 360)
+
 
         canvas.drawArc(
             0f,
@@ -49,7 +50,7 @@ class CustomView(
             width.toFloat(),
             height.toFloat(),
             -90f,
-            startAngel,
+            angle,
             true,
             paint
         )
@@ -58,17 +59,17 @@ class CustomView(
     /**
      * Set lasted milliseconds
      */
-    fun setCurrent(current: Long) {
-        currentMs = current
+    fun setCurrent(current: Long,  periodMs: Long) {
+        angle = (360 - 360f * current / periodMs)
         invalidate()
     }
 
     /**
      * Set time period
      */
-    fun setPeriod(period: Long) {
+    /*fun setPeriod(period: Long) {
         periodMs = period
-    }
+    }*/
 
     private companion object {
 
